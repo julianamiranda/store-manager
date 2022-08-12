@@ -32,6 +32,7 @@ describe('Model - Products', () => {
       });
     });
   });
+
   describe('#getById', () => {
     describe('quando existe o produto com o id solicitado', () => {
       const product = data.allProductsResponse[0];
@@ -59,6 +60,28 @@ describe('Model - Products', () => {
       it('retorna null', async () => {
         const result = await products.getById(21);
         expect(result).to.be.null;
+      });
+    });
+  });
+  
+  describe('#create', () => {
+    describe('quando um produto é cadastrado com sucesso', () => {
+      const product = data.productCreateResponse;
+      const body = data.rightProductBody;
+      before(() => sinon.stub(connection, 'execute').resolves([product]));
+      after(() => connection.execute.restore());
+
+      it('retorna um objeto', async () => {
+        const result = await products.create(body);
+        expect(result).to.be.an('object');
+      });
+      it('o objeto não está vazio', async () => {
+        const result = await products.create(body);
+        expect(result).to.not.be.empty;
+      });
+      it('objeto tem as propriedades: "id", "name"', async () => {
+        const result = await products.create(body);
+        expect(result).to.include.all.keys('id', 'name');
       });
     });
   });

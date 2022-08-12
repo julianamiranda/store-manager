@@ -5,6 +5,12 @@ const allProductsResponse =
     { id: 3, name: 'Escudo do Capitão América' },
   ];
 
+const rightProductBody = { name: 'Produto1' };
+
+const productCreateResponse = { id: 4, name: 'Produto1' };
+
 module.exports = {
   allProductsResponse,
+  rightProductBody,
+  productCreateResponse,
 };

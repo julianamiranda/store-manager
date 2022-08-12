@@ -63,4 +63,26 @@ describe('Service - Products', () => {
       });
     });
   });
+
+  describe('#create', () => {
+    describe('quando um produto é cadastrado com sucesso', () => {
+      const product = data.productCreateResponse;
+      const body = data.rightProductBody;
+      before(() => sinon.stub(productsModel, 'create').resolves(product));
+      after(() => productsModel.create.restore());
+
+      it('retorna um objeto', async () => {
+        const result = await productsService.create(body);
+        expect(result).to.be.an('object');
+      });
+      it('o objeto não está vazio', async () => {
+        const result = await productsService.create(body);
+        expect(result).to.not.be.empty;
+      });
+      it('objeto tem as propriedades: "id", "name"', async () => {
+        const result = await productsService.create(body);
+        expect(result).to.include.all.keys('id', 'name');
+      });
+    });
+  });
 });

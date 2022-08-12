@@ -10,10 +10,17 @@ const update = async (name, id) => {
   if (rows !== 1) return null;
   return { id, name };
 };
-
+const remove = async (id) => {
+  const productCheck = await products.getById(id);
+  if (!productCheck) return null;
+  const rows = await products.remove(id);
+  if (rows !== 1) return null;
+  return true;
+};
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  remove,
 };

@@ -53,7 +53,7 @@ describe('Service - Products', () => {
       });
     });
 
-    describe('quando não existem produtos cadastrados', () => {
+    describe('quando não existe um produto com o id solicitado', () => {
       before(() => sinon.stub(productsModel, 'getById').resolves(null));
       after(() => productsModel.getById.restore());
 

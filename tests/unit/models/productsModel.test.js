@@ -52,7 +52,7 @@ describe('Model - Products', () => {
       });
     });
 
-    describe('quando não existem produtos cadastrados', () => {
+    describe('quando não existe um produto com o id solicitado', () => {
       before(() => sinon.stub(connection, 'execute').resolves([[]]));
       after(() => connection.execute.restore());
 

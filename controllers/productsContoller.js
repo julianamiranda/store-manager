@@ -30,7 +30,14 @@ const remove = async (req, res) => {
   const id = Number(req.params.id);
   const result = await products.remove(id);
   if (!result) return res.status(404).json({ message: 'Product not found' });
-  return res.status(204);
+  return res.sendStatus(204);
+};
+
+const search = async (req, res) => {
+  const { q } = req.query;
+  const result = await products.search(`%${q}%`);
+  if (!result) return res.status(404).json({ message: 'Product not found' });
+  return res.status(200).json(result);
 };
 
 module.exports = {
@@ -39,4 +46,5 @@ module.exports = {
   create,
   update,
   remove,
+  search,
 };

@@ -161,4 +161,44 @@ describe('Controller - Products', () => {
       });
     });
   });
+
+  describe('#remove', () => {
+    describe('quando um produto é excluído com sucesso', () => {
+      const response = {};
+      const request = {};
+      before(() => {
+        request.params = { id: 1 };
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns();
+        sinon.stub(productsService, 'remove').resolves(true)
+      });
+      after(() => productsService.remove.restore());
+
+      it('o status retornado é 204', async () => {
+        await productsController.remove(request, response);
+        expect(response.status.calledWith(204)).to.be.equal(true);
+      });
+    });
+
+    describe('quando um produto não é excluído com sucesso', () => {
+      const response = {};
+      const request = {};
+      before(() => {
+        request.params = { id: 21 };
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns();
+        sinon.stub(productsService, 'remove').resolves(null)
+      });
+      after(() => productsService.remove.restore());
+
+      it('o status retornado 404', async () => {
+        await productsController.remove(request, response);
+        expect(response.status.calledWith(404)).to.be.equal(true);
+      });
+      it('retorna uma mensagem', async () => {
+        await productsController.remove(request, response);
+        expect(response.json.calledWith({ message: 'Product not found' })).to.be.equal(true);
+      });
+    });
+  });
 });

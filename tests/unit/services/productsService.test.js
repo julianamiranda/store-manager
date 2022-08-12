@@ -117,4 +117,25 @@ describe('Service - Products', () => {
       });
     });
   });
+
+  describe('#remove', () => {
+    describe('quando um produto é excluído com sucesso', () => {
+      before(() => sinon.stub(productsModel, 'remove').resolves(1));
+      after(() => productsModel.remove.restore());
+
+      it('retorna um true', async () => {
+        const result = await productsService.remove(1);
+        expect(result).to.be.true;
+      });
+    });
+    describe('quando um produto não é excluído com sucesso', () => {
+      before(() => sinon.stub(productsModel, 'remove').resolves(1));
+      after(() => productsModel.remove.restore());
+
+      it('retorna null', async () => {
+        const result = await productsService.remove(21);
+        expect(result).to.be.null;
+      });
+    });
+  });
 });

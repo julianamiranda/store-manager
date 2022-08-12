@@ -102,4 +102,20 @@ describe('Model - Products', () => {
       });
     });
   });
+
+  describe('#remove', () => {
+    describe('quando um produto é alterado com sucesso', () => {
+      before(() => sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]));
+      after(() => connection.execute.restore());
+
+      it('retorna o numero de linhas alteradas', async () => {
+        const result = await products.remove(1);
+        expect(result).to.be.equal(1);
+      });
+      it('não é nulo', async () => {
+        const result = await products.remove(1);
+        expect(result).to.not.be.null;
+      });
+    });
+  });
 });

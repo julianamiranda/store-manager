@@ -87,7 +87,7 @@ describe('Model - Products', () => {
   });
 
   describe('#update', () => {
-    describe('quando um produto é cadastrado com sucesso', () => {
+    describe('quando um produto é alterado com sucesso', () => {
       const body = data.productUpdateBody.name;
       before(() => sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]));
       after(() => connection.execute.restore());

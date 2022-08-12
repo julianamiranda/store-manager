@@ -63,7 +63,7 @@ describe('Model - Products', () => {
       });
     });
   });
-  
+
   describe('#create', () => {
     describe('quando um produto é cadastrado com sucesso', () => {
       const product = data.productCreateResponse;
@@ -82,6 +82,23 @@ describe('Model - Products', () => {
       it('objeto tem as propriedades: "id", "name"', async () => {
         const result = await products.create(body);
         expect(result).to.include.all.keys('id', 'name');
+      });
+    });
+  });
+
+  describe('#update', () => {
+    describe('quando um produto é cadastrado com sucesso', () => {
+      const body = data.productUpdateBody.name;
+      before(() => sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]));
+      after(() => connection.execute.restore());
+
+      it('retorna o numero de linhas alteradas', async () => {
+        const result = await products.update(body, 1);
+        expect(result).to.be.equal(1);
+      });
+      it('não é nulo', async () => {
+        const result = await products.update(body, 1);
+        expect(result).to.not.be.null;
       });
     });
   });

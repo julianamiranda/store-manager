@@ -92,4 +92,27 @@ describe('Controller - Products', () => {
       });
     });
   });
+
+  describe('#create', () => {
+    describe('quando um produto é cadastrado com sucesso', () => {
+      const response = {};
+      const request = {};
+      before(() => {
+        request.body = data.rightProductBody;
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns();
+        sinon.stub(productsService, 'create').resolves(data.productCreateResponse)
+      });
+      after(() => productsService.create.restore());
+
+      it('o status retornado é 201', async () => {
+        await productsController.create(request, response);
+        expect(response.status.calledWith(201)).to.be.equal(true);
+      });
+      it('retorna um objeto com os dados cadastrados', async () => {
+        await productsController.create(request, response);
+        expect(response.json.calledWith(data.productCreateResponse)).to.be.equal(true);
+      });
+    });
+  });
 });

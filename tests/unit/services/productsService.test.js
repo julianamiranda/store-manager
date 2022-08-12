@@ -85,4 +85,36 @@ describe('Service - Products', () => {
       });
     });
   });
+
+  describe('#update', () => {
+    describe('quando um produto é alterado com sucesso', () => {
+      const body = data.productUpdateBody.name;
+      before(() => sinon.stub(productsModel, 'update').resolves(1));
+      after(() => productsModel.update.restore());
+
+      it('retorna um objeto', async () => {
+        const result = await productsService.update(body, 1);
+        expect(result).to.not.be.empty;
+        expect(result).to.be.an('object');
+      });
+      it('objeto tem as propriedades: "id", "name"', async () => {
+        const result = await productsService.update(body, 1);
+        expect(result).to.include.all.keys('id', 'name');
+      });
+      it('objeto tem os dados do produto alterado', async () => {
+        const result = await productsService.update(body, 1);
+        expect(result).to.to.deep.include(data.productUpdated);
+      });
+    });
+    describe('quando um produto não é alterado com sucesso', () => {
+      const body = data.productUpdateBody.name;
+      before(() => sinon.stub(productsModel, 'update').resolves(1));
+      after(() => productsModel.update.restore());
+
+      it('retorna null', async () => {
+        const result = await productsService.update(body, 21);
+        expect(result).to.be.null;
+      });
+    });
+  });
 });

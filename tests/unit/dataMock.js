@@ -11,9 +11,12 @@ const productCreateResponse = { id: 4, name: 'Produto1' };
 
 const productUpdateBody = { name: 'Machado do Thor Stormbreaker' };
 
+const productUpdated = { id: 1, name: 'Machado do Thor Stormbreaker' };
+
 module.exports = {
   allProductsResponse,
   rightProductBody,
   productCreateResponse,
   productUpdateBody,
+  productUpdated,
 };

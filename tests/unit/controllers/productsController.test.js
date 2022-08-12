@@ -115,4 +115,50 @@ describe('Controller - Products', () => {
       });
     });
   });
+
+  describe('#update', () => {
+    describe('quando um produto é alterado com sucesso', () => {
+      const response = {};
+      const request = {};
+      before(() => {
+        request.params = { id: 1 };
+        request.body = data.productUpdateBody;
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns();
+        sinon.stub(productsService, 'update').resolves(data.productUpdated)
+      });
+      after(() => productsService.update.restore());
+
+      it('o status retornado é 200', async () => {
+        await productsController.update(request, response);
+        expect(response.status.calledWith(200)).to.be.equal(true);
+      });
+      it('retorna um objeto com os dados cadastrados', async () => {
+        await productsController.update(request, response);
+        expect(response.json.calledWith(data.productUpdated)).to.be.equal(true);
+      });
+    });
+
+    describe('quando um produto não é alterado com sucesso', () => {
+      const response = {};
+      const request = {};
+      before(() => {
+        request.params = { id: 21 };
+        request.body = data.productUpdateBody;
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns();
+        sinon.stub(productsService, 'update').resolves(null)
+      });
+      after(() => productsService.update.restore());
+
+      it('o status retornado 404', async () => {
+        await productsController.update(request, response);
+        expect(response.status.calledWith(404)).to.be.equal(true);
+      });
+      it('retorna uma mensagem', async () => {
+        await productsController.update(request, response);
+        expect(response.json.calledWith({ message: 'Product not found' })).to.be.equal(true);
+      });
+    });
+  });
 });

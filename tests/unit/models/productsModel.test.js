@@ -19,14 +19,44 @@ describe('#getAll', () => {
       const result = await products.getAll();
       expect(result).to.not.be.empty;
     });
-
   });
+
   describe('quando não existem produtos cadastrados', () => {
     before(() => sinon.stub(connection, 'execute').resolves([[]]));
     after(() => connection.execute.restore());
 
-    it('retorna um array', async () => {
+    it('retorna null', async () => {
       const result = await products.getAll();
+      expect(result).to.be.null;
+    });
+  });
+});
+describe('#getById', () => {
+  describe('quando existe o produto com o id solicitado', () => {
+    const product = data.allProductsResponse[0];
+    before(() => sinon.stub(connection, 'execute').resolves([[product]]));
+    after(() => connection.execute.restore());
+
+    it('retorna um objeto', async () => {
+      const result = await products.getById(1);
+      expect(result).to.be.an('object');
+    });
+    it('o objeto não está vazio', async () => {
+      const result = await products.getById(1);
+      expect(result).to.not.be.empty;
+    });
+    it('objeto tem as propriedades: "id", "name"', async () => {
+      const result = await products.getById(1);
+      expect(result).to.include.all.keys('id', 'name');
+    });
+  });
+
+  describe('quando não existem produtos cadastrados', () => {
+    before(() => sinon.stub(connection, 'execute').resolves([[]]));
+    after(() => connection.execute.restore());
+
+    it('retorna null', async () => {
+      const result = await products.getById(21);
       expect(result).to.be.null;
     });
   });

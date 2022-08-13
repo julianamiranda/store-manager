@@ -33,7 +33,7 @@ const remove = async (req, res) => {
   const id = Number(req.params.id);
   const result = await products.remove(id);
   if (!result) return res.status(404).json({ message });
-  return res.status(204).end();
+  return res.status(204).send();
 };
 
 const search = async (req, res) => {

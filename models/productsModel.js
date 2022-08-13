@@ -32,10 +32,18 @@ const remove = async (id) => {
   return affectedRows;
 };
 
+const search = async (item) => {
+  const sql = 'SELECT * FROM StoreManager.products WHERE name LIKE (?);';
+  const [result] = await connection.execute(sql, [item]);
+  if (!result.length) return null;
+  return result;
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
   remove,
+  search,
 };

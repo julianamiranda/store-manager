@@ -17,10 +17,13 @@ const remove = async (id) => {
   if (rows !== 1) return null;
   return true;
 };
+const search = async (item) => products.search(item);
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
   remove,
+  search,
 };

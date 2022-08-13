@@ -3,7 +3,7 @@ const { describe } = require('mocha');
 const sinon = require('sinon');
 
 const productsService = require('../../../services/productsService');
-const productsController = require('../../../controllers/productsContoller');
+const productsController = require('../../../controllers/productsController');
 const data = require('../dataMock');
 
 describe('Controller - Products', () => {
@@ -174,10 +174,10 @@ describe('Controller - Products', () => {
       });
       after(() => productsService.remove.restore());
 
-      /* it('o status retornado é 204', async () => {
+      it('o status retornado é 204', async () => {
         await productsController.remove(request, response);
         expect(response.status.calledWith(204)).to.be.equal(true);
-      }); */
+      });
     });
 
     describe('quando um produto não é excluído com sucesso', () => {

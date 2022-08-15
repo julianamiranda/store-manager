@@ -60,7 +60,7 @@ const search = async (req, res) => {
   try {
     const { q } = req.query;
     const result = await products.search(`%${q}%`);
-    if (!result) return res.status(404).json({ message: notFound });
+    if (!result) return res.status(200).json(await products.getAll());
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json(error.message);

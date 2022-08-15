@@ -1,5 +1,28 @@
 const sales = require('../services/salesService');
 
+const notFound = 'Sale not found';
+
+const getAll = async (_req, res) => {
+  try {
+    const result = await sales.getAll();
+    if (!result) return res.status(404).json({ message: notFound });
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
+const getById = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const result = await sales.getById(id);
+    if (!result) return res.status(404).json({ message: notFound });
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
 const create = async (req, res) => {
   try {
     const data = req.body;
@@ -8,11 +31,12 @@ const create = async (req, res) => {
     const result = await sales.create(data);
     return res.status(201).json(result);
   } catch (error) {
-    console.log(error.message);
     return res.status(500).json(error.message);
   }
 };
 
 module.exports = {
+  getAll,
+  getById,
   create,
 };

@@ -7,6 +7,63 @@ const salesService = require('../../../services/salesService');
 const data = require('../dataMock');
 
 describe('Service - Sales', () => {
+  describe('#getAll', () => {
+    describe('quando existem vendas cadastrados', () => {
+      before(() => sinon.stub(salesModel, 'getAll').resolves(data.allSalesResponse));
+      after(() => salesModel.getAll.restore());
+
+      it('retorna um array com todas as vendas', async () => {
+        const result = await salesService.getAll();
+        expect(result).to.be.an('array');
+      });
+      it('o array não está vazio', async () => {
+        const result = await salesService.getAll();
+        expect(result).to.not.be.empty;
+      });
+    });
+
+    describe('quando não existem vendas cadastrados', () => {
+      before(() => sinon.stub(salesModel, 'getAll').resolves(null));
+      after(() => salesModel.getAll.restore());
+
+      it('retorna null', async () => {
+        const result = await salesService.getAll();
+        expect(result).to.be.null;
+      });
+    });
+  });
+
+  describe('#getById', () => {
+    describe('quando existe o produto com o id solicitado', () => {
+      const sales = data.byIdSalesResponse;
+      before(() => sinon.stub(salesModel, 'getById').resolves(sales));
+      after(() => salesModel.getById.restore());
+
+      it('retorna um array', async () => {
+        const result = await salesService.getById(1);
+        expect(result).to.be.an('array');
+      });
+      it('o array não está vazio', async () => {
+        const result = await salesService.getById(1);
+        expect(result).to.not.be.empty;
+      });
+      it('que possui objetos com as propriedades: "date", "productId", "quantity"', async () => {
+        const result = await salesService.getById(1);
+        expect(result[0]).to.include.all.keys('date', 'productId', 'quantity');
+      });
+    });
+
+    describe('quando não existe uma venda com o id solicitado', () => {
+      before(() => sinon.stub(salesModel, 'getById').resolves(null));
+      after(() => salesModel.getById.restore());
+
+      it('retorna null', async () => {
+        const result = await salesService.getById(21);
+        expect(result).to.be.null;
+      });
+    });
+  });
+
   describe('#exists', () => {
     describe('quando existe o produto com o id a ser cadastro', () => {
       it('retorna true', async () => {

@@ -11,8 +11,10 @@ const exists = async (data) => {
 
 const create = async (data) => {
   const id = await sales.createSalesId();
-  const result = await sales.create(id, data);
-  return result;
+  await data.forEach(async ({ productId, quantity }) => {
+    await sales.create(id, productId, quantity);
+  });
+  return { id, itemsSold: data };
 };
 module.exports = {
   create,

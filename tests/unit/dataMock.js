@@ -15,6 +15,24 @@ const productUpdated = { id: 1, name: 'Machado do Thor Stormbreaker' };
 
 const productSearch = [{ id: 1, name: 'Martelo de Thor' }];
 
+const rightSaleBody = [
+  { productId: 1, quantity: 1 },
+  { productId: 2, quantity: 5 },
+];
+
+const nonexistentProductIdBody = [
+  { productId: 1, quantity: 1 },
+  { productId: 99999, quantity: 5 },
+];
+
+const saleCreateResponse = {
+  id: 3,
+  itemsSold: [
+    { productId: 1, quantity: 1 },
+    { productId: 2, quantity: 5 },
+  ]
+}
+
 module.exports = {
   allProductsResponse,
   rightProductBody,
@@ -22,4 +40,7 @@ module.exports = {
   productUpdateBody,
   productUpdated,
   productSearch,
+  rightSaleBody,
+  nonexistentProductIdBody,
+  saleCreateResponse,
 };

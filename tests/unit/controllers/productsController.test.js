@@ -117,7 +117,7 @@ describe('Controller - Products', () => {
   });
 
   describe('#update', () => {
-    describe('quando um produto é alterado com sucesso', () => {
+    describe('quando o produto é alterado com sucesso', () => {
       const response = {};
       const request = {};
       before(() => {
@@ -139,7 +139,7 @@ describe('Controller - Products', () => {
       });
     });
 
-    describe('quando um produto não é alterado com sucesso', () => {
+    describe('quando o produto não é alterado com sucesso', () => {
       const response = {};
       const request = {};
       before(() => {
@@ -163,7 +163,7 @@ describe('Controller - Products', () => {
   });
 
   describe('#remove', () => {
-    describe('quando um produto é excluído com sucesso', () => {
+    describe('quando o produto é excluído com sucesso', () => {
       const response = {};
       const request = {};
       before(() => {
@@ -180,7 +180,7 @@ describe('Controller - Products', () => {
       });
     });
 
-    describe('quando um produto não é excluído com sucesso', () => {
+    describe('quando o produto não é excluído com sucesso', () => {
       const response = {};
       const request = {};
       before(() => {
@@ -198,6 +198,50 @@ describe('Controller - Products', () => {
       it('retorna uma mensagem', async () => {
         await productsController.remove(request, response);
         expect(response.json.calledWith({ message: 'Product not found' })).to.be.equal(true);
+      });
+    });
+  });
+
+  describe('#search', () => {
+    describe('quando existe o produto com o id solicitado', () => {
+      const response = {};
+      const request = {};
+      before(() => {
+        request.query = 'Martelo';
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns();
+        sinon.stub(productsService, 'search').resolves(data.productSearch)
+      });
+      after(() => productsService.search.restore());
+
+      it('o status retornado é 200', async () => {
+        await productsController.search(request, response);
+        expect(response.status.calledWith(200)).to.be.equal(true);
+      });
+      it('retorna um array com um objeto com os dados do produto pesquisado', async () => {
+        await productsController.search(request, response);
+        expect(response.json.calledWith(data.productSearch)).to.be.equal(true);
+      });
+    });
+
+    describe('quando não existe o produto pesquisado', () => {
+      const response = {};
+      const request = {};
+      before(() => {
+        request.query = 'notFound';
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns();
+        sinon.stub(productsService, 'search').resolves(null)
+      });
+      after(() => productsService.search.restore());
+
+      it('o status retornado é 200', async () => {
+        await productsController.search(request, response);
+        expect(response.status.calledWith(200)).to.be.equal(true);
+      });
+      it('retorna um array com todos os produtos', async () => {
+        await productsController.search(request, response);
+        expect(response.json.calledWith(data.allProductsResponse)).to.be.equal(true);
       });
     });
   });

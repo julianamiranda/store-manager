@@ -108,7 +108,7 @@ describe('Service - Products', () => {
     });
     describe('quando um produto não é alterado com sucesso', () => {
       const body = data.productUpdateBody.name;
-      before(() => sinon.stub(productsModel, 'update').resolves(1));
+      before(() => sinon.stub(productsModel, 'update').resolves(0));
       after(() => productsModel.update.restore());
 
       it('retorna null', async () => {
@@ -129,11 +129,38 @@ describe('Service - Products', () => {
       });
     });
     describe('quando um produto não é excluído com sucesso', () => {
-      before(() => sinon.stub(productsModel, 'remove').resolves(1));
+      before(() => sinon.stub(productsModel, 'remove').resolves(0));
       after(() => productsModel.remove.restore());
 
       it('retorna null', async () => {
         const result = await productsService.remove(21);
+        expect(result).to.be.null;
+      });
+    });
+  });
+
+  describe('#search', () => {
+    describe('quando existe o produto pesquisado', () => {
+      const product = data.productSearch;
+      before(() => sinon.stub(productsModel, 'search').resolves(product));
+      after(() => productsModel.search.restore());
+
+      it('retorna um array', async () => {
+        const result = await productsService.search('Martelo');
+        expect(result).to.be.an('array');
+      });
+      it('o array não está vazio', async () => {
+        const result = await productsService.search('Martelo');
+        expect(result).to.not.be.empty;
+      });
+    });
+
+    describe('quando não existe o produto pesquisado', () => {
+      before(() => sinon.stub(productsModel, 'search').resolves(null));
+      after(() => productsModel.search.restore());
+
+      it('retorna retorna null', async () => {
+        const result = await productsService.search('notFound');
         expect(result).to.be.null;
       });
     });

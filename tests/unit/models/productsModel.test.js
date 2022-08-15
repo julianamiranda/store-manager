@@ -87,7 +87,7 @@ describe('Model - Products', () => {
   });
 
   describe('#update', () => {
-    describe('quando um produto é alterado com sucesso', () => {
+    describe('quando o produto é alterado com sucesso', () => {
       const body = data.productUpdateBody.name;
       before(() => sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]));
       after(() => connection.execute.restore());
@@ -104,7 +104,7 @@ describe('Model - Products', () => {
   });
 
   describe('#remove', () => {
-    describe('quando um produto é alterado com sucesso', () => {
+    describe('quando o produto é excluído com sucesso', () => {
       before(() => sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]));
       after(() => connection.execute.restore());
 
@@ -115,6 +115,38 @@ describe('Model - Products', () => {
       it('não é nulo', async () => {
         const result = await products.remove(1);
         expect(result).to.not.be.null;
+      });
+    });
+  });
+
+  describe('#search', () => {
+    describe('quando existe o produto pesquisado', () => {
+      const product = data.productSearch;
+      before(() => sinon.stub(connection, 'execute').resolves([[product]]));
+      after(() => connection.execute.restore());
+
+      it('retorna um array', async () => {
+        const [result] = await products.search('Martelo');
+        expect(result).to.be.an('array');
+      });
+      it('o array não está vazio', async () => {
+        const result = await products.search('Martelo');
+        expect(result).to.not.be.empty;
+      });
+      it('o array tem um objeto com os dados do produto pesquisado', async () => {
+        const [[result]] = await products.search('Martelo');
+        expect(result).to.include.all.keys('id', 'name');
+        expect(result.name).to.contains('Martelo');
+      });
+    });
+
+    describe('quando não existe o produto pesquisado', () => {
+      before(() => sinon.stub(connection, 'execute').resolves([[]]));
+      after(() => connection.execute.restore());
+
+      it('retorna retorna null', async () => {
+        const result = await products.search('notFound');
+        expect(result).to.be.null;
       });
     });
   });

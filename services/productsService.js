@@ -6,15 +6,13 @@ const create = async (name) => products.create(name);
 const update = async (name, id) => {
   const productCheck = await products.getById(id);
   if (!productCheck) return null;
-  const rows = await products.update(name, id);
-  if (rows !== 1) return null;
+  await products.update(name, id);
   return { id, name };
 };
 const remove = async (id) => {
   const productCheck = await products.getById(id);
   if (!productCheck) return null;
-  const rows = await products.remove(id);
-  if (rows !== 1) return null;
+  await products.remove(id);
   return true;
 };
 const search = async (item) => products.search(item);

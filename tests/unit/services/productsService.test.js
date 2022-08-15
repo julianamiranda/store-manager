@@ -107,13 +107,15 @@ describe('Service - Products', () => {
       });
     });
     describe('quando um produto não é alterado com sucesso', () => {
-      const body = data.productUpdateBody.name;
-      before(() => sinon.stub(productsModel, 'update').resolves(0));
-      after(() => productsModel.update.restore());
+      describe('o produto não existe no BD', () => {
+        const body = data.productUpdateBody.name;
+        before(() => sinon.stub(productsModel, 'update').resolves(0));
+        after(() => productsModel.update.restore());
 
-      it('retorna null', async () => {
-        const result = await productsService.update(body, 21);
-        expect(result).to.be.null;
+        it('retorna null', async () => {
+          const result = await productsService.update(body, 21);
+          expect(result).to.be.null;
+        });
       });
     });
   });
@@ -129,12 +131,13 @@ describe('Service - Products', () => {
       });
     });
     describe('quando um produto não é excluído com sucesso', () => {
-      before(() => sinon.stub(productsModel, 'remove').resolves(0));
-      after(() => productsModel.remove.restore());
-
-      it('retorna null', async () => {
-        const result = await productsService.remove(21);
-        expect(result).to.be.null;
+      describe('o produto não existe no BD', () => {
+        before(() => sinon.stub(productsModel, 'getById').resolves(0));
+        after(() => productsModel.getById.restore());
+        it('retorna null', async () => {
+          const result = await productsService.remove(21);
+          expect(result).to.be.null;
+        });
       });
     });
   });

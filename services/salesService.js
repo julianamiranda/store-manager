@@ -18,9 +18,23 @@ const create = async (data) => {
   });
   return { id, itemsSold: data };
 };
+
+const update = async (id, data) => {
+  const saleCheck = await sales.getById(id);
+  if (!saleCheck) return null;
+  await data.forEach(async ({ productId, quantity }) => {
+    await sales.update(id, productId, quantity);
+  });
+  return { saleId: id, itemsUpdated: data };
+};
+
+const remove = async (id) => sales.remove(id);
+
 module.exports = {
   getAll,
   getById,
   create,
   exists,
+  update,
+  remove,
 };
